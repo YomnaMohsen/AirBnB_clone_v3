@@ -13,6 +13,7 @@ port = os.getenv("HBNB_API_PORT", '5000')
 # global var app
 app = Flask(__name__)
 app.register_blueprint(app_views)
+app.url_map.strict_slashes = False
 
 
 @app.errorhandler(404)
