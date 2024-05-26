@@ -28,7 +28,6 @@ def state():
     
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'PUT'])
 def state_id(state_id): 
-    """"""
      if request.method == 'GET':
          obj = storage.get(State, state_id)
          if not obj:
