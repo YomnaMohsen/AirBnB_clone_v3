@@ -16,8 +16,4 @@ def state(state_id=None):
             for val in state_dict.values():
                 state_list.append(val.to_dict())
             return jsonify(state_list)
-        else:
-            obj = storage.get(State, state_id)
-            if not obj:
-                abort(404)
-            return jsonify(obj.to_dict())
+
