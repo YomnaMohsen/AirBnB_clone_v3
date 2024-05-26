@@ -8,6 +8,7 @@ from models import storage
 
 @app_views.route('/states', methods=['GET','POST'])
 def state():
+    """handles http methods without id"""
     if request.method == 'GET':
         state_list = []
         state_dict = storage.all(State)
@@ -28,6 +29,7 @@ def state():
     
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'PUT'])
 def state_id(state_id): 
+    """"""
      if request.method == 'GET':
          obj = storage.get(State, state_id)
          if not obj:
