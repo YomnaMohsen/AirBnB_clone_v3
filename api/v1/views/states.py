@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Handle states rest apis"""
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models.state import State
 from models import storage
 
@@ -18,4 +18,6 @@ def state(state_id=None):
             return jsonify(state_list)
         else:
             obj = storage.get(State, state_id)
+            if not obj:
+                abort(404)
             return jsonify(obj.to_dict())
