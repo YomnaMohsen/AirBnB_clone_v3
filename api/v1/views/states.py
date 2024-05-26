@@ -6,8 +6,8 @@ from models.state import State
 from models import storage
 
 
-@app_views.route('/states', methods=['GET', 'POST', 'PUT', "DELETE"])
-@app_views.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def state(state_id=None):
     if request.method == 'GET':
         if state_id is None:
