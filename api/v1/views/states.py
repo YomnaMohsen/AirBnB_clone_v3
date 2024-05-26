@@ -8,7 +8,6 @@ from models import storage
 
 @app_views.route('/states', methods=['GET','POST'])
 def state():
-    """handles http methods without id"""
     if request.method == 'GET':
         state_list = []
         state_dict = storage.all(State)
