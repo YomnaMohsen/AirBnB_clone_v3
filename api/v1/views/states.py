@@ -7,7 +7,7 @@ from models import storage
 
 
 @app_views.route('/states', methods=['GET', 'DELETE','POST', 'PUT', ])
-@app_views.route('/states/<state_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'POST', 'PUT'])
 def state(state_id=None):
     if request.method == 'GET':
         if state_id is None:
@@ -26,4 +26,15 @@ def state(state_id=None):
         if not obj:
             abort(404)
         storage.delete(obj)
-        return jsonify({})       
+        storage.save()
+        return jsonify({})
+    
+    if request.method == 'POST':
+        req_data = request.get_json()
+        if req_data is None:
+            abort(400, "Not json")
+        if req_data.get("name") is None:
+             abort(400, "Missing name")
+        new_state = State(**req_data)
+        new_state.save()
+        return jsonify(new_state.to_dict(), 201)            
