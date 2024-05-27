@@ -47,7 +47,7 @@ def state_del(state_id):
         abort(404)
     storage.delete(obj)
     storage.save()
-    return jsonify({})     
+    return jsonify({}), 200    
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'])
@@ -66,5 +66,5 @@ def state_put(state_id):
     for key, val in update_dict.items():
             setattr(obj, key, val)
     storage.save()        
-    return jsonify(update_dict)  
+    return jsonify(obj.to_dict()), 200  
 
