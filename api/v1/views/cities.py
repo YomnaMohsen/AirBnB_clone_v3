@@ -13,7 +13,7 @@ def cities_get(state_id):
     s_obj = storage.get(State, state_id)
     if not s_obj:
         abort(404)
-    all_cities = storage.all(City)    
+    all_cities = storage.all(City)
     cities_states = [obj.to_dict() for obj in all_cities.values()
                      if obj.state_id == state_id]
     return jsonify(cities_states)
@@ -22,6 +22,9 @@ def cities_get(state_id):
 @app_views.route('/states/<state_id>/cities', methods=['POST'])
 def city_id(state_id):
     """creates new city"""
+    obj = storage.get(State, state_id)
+    if not obj:
+        abort(404)
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
@@ -54,7 +57,7 @@ def city_del(city_id):
     return jsonify({}), 200
 
 
-@app_views.route('/states/cities/<city_id>', methods=['PUT'])
+@app_views.route('/cities/<city_id>', methods=['PUT'])
 def city_put(city_id):
     """update city selected by id"""
     obj = storage.get(City, city_id)

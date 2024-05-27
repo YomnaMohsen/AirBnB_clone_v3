@@ -4,6 +4,7 @@ from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.city import City
 from models.place import Place
+from models.user import User
 from models import storage
 
 
@@ -19,34 +20,42 @@ def places_get(city_id):
     return jsonify(places_cities)
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'])
-def city_id(state_id):
-    """creates new city"""
+@app_views.route('/cities/<city_id>/places', methods=['POST'])
+def place_id(city_id):
+    """creates new place"""
+    obj = storage.get(City, city_id)
+    if not obj:
+        abort(404)
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
     if req_data.get("name") is None:
         return jsonify({"error": "Missing name"}), 400
-    req_data['state_id'] = state_id
+    if req_data.get("user_id") is None:
+        return jsonify({"error": "Missing user_id"}), 400
+    u_obj = storage.get(User, req_data["user_id"])
+    if not u_obj:
+        abort(404)
+    req_data['city_id'] = city_id
     new_city = City(**req_data)
     storage.new(new_city)
     storage.save()
     return jsonify(new_city.to_dict()), 201
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'])
-def city_getid(city_id):
-    """get city by id"""
-    obj = storage.get(City, city_id)
+@app_views.route('/places/<place_id>', methods=['GET'])
+def place_getid(place_id):
+    """get place by id"""
+    obj = storage.get(Place, place_id)
     if not obj:
         abort(404)
     return jsonify(obj.to_dict())
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'])
-def city_del(city_id):
-    """delete city by id"""
-    obj = storage.get(City, city_id)
+@app_views.route('/places/<place_id>', methods=['DELETE'])
+def place_del(place_id):
+    """delete place by id"""
+    obj = storage.get(Place, place_id)
     if not obj:
         abort(404)
     storage.delete(obj)
@@ -54,10 +63,10 @@ def city_del(city_id):
     return jsonify({}), 200
 
 
-@app_views.route('/states/cities/<city_id>', methods=['PUT'])
-def city_put(city_id):
-    """update city selected by id"""
-    obj = storage.get(City, city_id)
+@app_views.route('/places/<place_id>', methods=['PUT'])
+def place_put(place_id):
+    """update place selected by id"""
+    obj = storage.get(Place, place_id)
     if not obj:
         abort(404)
     req_data = request.get_json()
