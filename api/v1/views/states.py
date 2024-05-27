@@ -48,5 +48,23 @@ def state_del(state_id):
     storage.delete(obj)
     storage.save()
     return jsonify({})     
-              
+
+
+@app_views.route('/states/<state_id>', methods=['PUT'])
+def state_put(state_id):
+    """update state selected by id""" 
+    ignore_list =["id", "updated_at", "created_at"]
+    obj = storage.get(State, state_id)
+    if not obj:
+        abort(404)
+    req_data = request.get_json()
+    if req_data is None:
+        abort(400, "Not json")
+    update_dict = {
+        k: v for k, v in req_data.items() if k not in ignore_list
+    }
+    for key, val in update_dict.items():
+            setattr(obj, key, val)
+    storage.save()        
+    return jsonify(update_dict)  
 
