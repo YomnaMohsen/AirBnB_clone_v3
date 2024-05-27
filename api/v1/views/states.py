@@ -21,9 +21,10 @@ def state_post():
     """post new state"""
     req_data = request.get_json()
     if req_data is None:
-        abort(400, "Not json")
+        return jsonify({"error": "Not json"}), 400
+        # abort(400, )
     if req_data.get("name") is None:
-        abort(400, "Missing name")
+        return jsonify({"error": "Missing name"}), 400
     new_state = State(**req_data)
     storage.new(new_state)
     storage.save()
@@ -59,7 +60,7 @@ def state_put(state_id):
         abort(404)
     req_data = request.get_json()
     if req_data is None:
-        abort(400, "Not json")
+        return jsonify({"error": "Not json"}), 400
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
     }
