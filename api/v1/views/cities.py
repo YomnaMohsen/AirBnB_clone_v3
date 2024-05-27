@@ -8,28 +8,28 @@ from models import storage
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET'])
-def cities_get():
+def cities_get(state_id):
     """get method to ret cities by state id"""
-    state_list = []
-    state_dict = storage.all(State)
-    for val in state_dict.values():
-        state_list.append(val.to_dict())
-    return jsonify(state_list)
+    s_obj = storage.get(State, state_id)
+    if not s_obj:
+        abort(404)
+    cities_states = [obj.to_dict() for obj in s_obj.cities]
+    return jsonify(cities_states)
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'])
 def city_id(state_id):
-    """post new state"""
+    """creates new city"""
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
-        # abort(400, )
     if req_data.get("name") is None:
         return jsonify({"error": "Missing name"}), 400
-    new_state = State(**req_data)
-    storage.new(new_state)
+    req_data['state_id'] = state_id
+    new_city = City(**req_data)
+    storage.new(new_city)
     storage.save()
-    return jsonify(new_state.to_dict()), 201
+    return jsonify(new_city.to_dict()), 201
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'])
@@ -55,13 +55,13 @@ def city_del(city_id):
 @app_views.route('/states/cities/<city_id>', methods=['PUT'])
 def city_put(city_id):
     """update city selected by id"""
-    ignore_list = ["id", "updated_at", "created_at"]
     obj = storage.get(City, city_id)
     if not obj:
         abort(404)
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
+    ignore_list = ["id", "updated_at", "created_at"]
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
     }
