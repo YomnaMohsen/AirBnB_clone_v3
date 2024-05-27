@@ -19,6 +19,8 @@ def state_get():
 @app_views.route('/states', methods=['POST'])
 def state_post():
     """post new state"""
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
@@ -54,13 +56,18 @@ def state_del(state_id):
 @app_views.route('/states/<state_id>', methods=['PUT'])
 def state_put(state_id):
     """update state selected by id"""
-    ignore_list = ["id", "updated_at", "created_at"]
     obj = storage.get(State, state_id)
     if not obj:
         abort(404)
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
+    
     req_data = request.get_json()
+    
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
+    
+    ignore_list = ["id", "updated_at", "created_at"]
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
     }
