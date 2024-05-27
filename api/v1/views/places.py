@@ -3,19 +3,18 @@
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.city import City
-from models.state import State
+from models.place import Place
 from models import storage
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'])
-def cities_get(state_id):
-    """get method to ret cities by state id"""
-    s_obj = storage.get(State, state_id)
-    if not s_obj:
+@app_views.route('/states/cities/<city_id>/places', methods=['GET'])
+def places_get(city_id):
+    """get method to ret places by city id"""
+    c_obj = storage.get(City, city_id)
+    if not c_obj:
         abort(404)
-    cities_states = [obj.to_dict() for obj in s_obj.cities
-                     if obj.state_id == state_id]
-    return jsonify(cities_states)
+    places_cities= [obj.to_dict() for obj in c_obj.places]
+    return jsonify(places_cities)
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'])
