@@ -61,12 +61,12 @@ def state_put(state_id):
         abort(404)
     if request.content_type != 'application/json':
         return jsonify({"error": "Not json"}), 400
-    
+
     req_data = request.get_json()
-    
+
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
-    
+
     ignore_list = ["id", "updated_at", "created_at"]
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
