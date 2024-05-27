@@ -19,6 +19,8 @@ def user_get():
 @app_views.route('/users', methods=['POST'])
 def user_post():
     """post user amenity"""
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
@@ -54,13 +56,17 @@ def user_del(user_id):
 @app_views.route('/users/<user_id>', methods=['PUT'])
 def user_put(user_id):
     """update user selected by id"""
-    ignore_list = ["id", "updated_at", "created_at"]
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
     obj = storage.get(User, user_id)
     if not obj:
         abort(404)
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
+    
+    ignore_list = ["id", "updated_at", "created_at"]
+    
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
     }
