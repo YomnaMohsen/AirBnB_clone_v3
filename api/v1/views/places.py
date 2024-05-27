@@ -8,7 +8,7 @@ from models.user import User
 from models import storage
 
 
-@app_views.route('/states/cities/<city_id>/places', methods=['GET'])
+@app_views.route('/cities/<city_id>/places', methods=['GET'])
 def places_get(city_id):
     """get method to ret places by city id"""
     c_obj = storage.get(City, city_id)
