@@ -8,7 +8,7 @@ from models import storage
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET'])
-def state_get():
+def cities_get():
     """get method to ret cities by state id"""
     state_list = []
     state_dict = storage.all(State)
@@ -18,7 +18,7 @@ def state_get():
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'])
-def state_id(state_id):
+def city_id(state_id):
     """post new state"""
     req_data = request.get_json()
     if req_data is None:
@@ -33,7 +33,7 @@ def state_id(state_id):
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'])
-def state_getid(city_id):
+def city_getid(city_id):
     """get city by id"""
     obj = storage.get(City, city_id)
     if not obj:
