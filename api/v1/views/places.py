@@ -13,7 +13,9 @@ def places_get(city_id):
     c_obj = storage.get(City, city_id)
     if not c_obj:
         abort(404)
-    places_cities= [obj.to_dict() for obj in c_obj.places]
+    all_places = storage.all(Place)    
+    places_cities= [obj.to_dict() for obj in all_places.values()
+                    if obj.city_id == city_id]
     return jsonify(places_cities)
 
 
