@@ -18,6 +18,7 @@ def state_get():
     
 @app_views.route('/states', methods=['POST'])
 def state_post():
+    """post new state"""
     req_data = request.get_json()
     if req_data is None:
         abort(400, "Not json")
@@ -30,11 +31,22 @@ def state_post():
     
     
 @app_views.route('/states/<state_id>', methods=['GET'])
-def state_id(state_id): 
+def state_getid(state_id): 
+    """get state by id"""
     obj = storage.get(State, state_id)
     if not obj:
         abort(404)
     return jsonify(obj.to_dict())
-     
+
+
+@app_views.route('/states/<state_id>', methods=['DELETE'])
+def state_del(state_id):
+    """delete state by id""" 
+    obj = storage.get(State, state_id)
+    if not obj:
+        abort(404)
+    storage.delete(obj)
+    storage.save()
+    return jsonify({})     
               
 
