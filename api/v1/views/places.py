@@ -29,13 +29,13 @@ def place_id(city_id):
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
-    if req_data.get("name") is None:
-        return jsonify({"error": "Missing name"}), 400
     if req_data.get("user_id") is None:
         return jsonify({"error": "Missing user_id"}), 400
-    u_obj = storage.get(User, req_data["user_id"])
+    u_obj = storage.get(User, req_data.get("user_id"))
     if not u_obj:
         abort(404)
+    if req_data.get("name") is None:
+        return jsonify({"error": "Missing name"}), 400    
     req_data['city_id'] = city_id
     new_city = City(**req_data)
     storage.new(new_city)
