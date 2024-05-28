@@ -7,7 +7,8 @@ from models.state import State
 from models import storage
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET'],
+                 strict_slashes=False)
 def cities_get(state_id):
     """get method to ret cities by state id"""
     s_obj = storage.get(State, state_id)
@@ -18,7 +19,8 @@ def cities_get(state_id):
     return jsonify(cities_states)
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['POST'],
+                 strict_slashes=False)
 def city_id(state_id):
     """creates new city"""
     obj = storage.get(State, state_id)

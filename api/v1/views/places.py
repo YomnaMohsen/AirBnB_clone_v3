@@ -8,19 +8,21 @@ from models.user import User
 from models import storage
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
 def places_get(city_id):
     """get method to ret places by city id"""
     c_obj = storage.get(City, city_id)
     if not c_obj:
         abort(404)
-    all_places = storage.all(Place)    
-    places_cities= [obj.to_dict() for obj in all_places.values()
-                    if obj.city_id == city_id]
+    all_places = storage.all(Place)
+    places_cities = [obj.to_dict() for obj in all_places.values()
+                     if obj.city_id == city_id]
     return jsonify(places_cities)
 
 
-@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def place_id(city_id):
     """creates new place"""
     obj = storage.get(City, city_id)
@@ -35,7 +37,7 @@ def place_id(city_id):
     if not u_obj:
         abort(404)
     if req_data.get("name") is None:
-        return jsonify({"error": "Missing name"}), 400    
+        return jsonify({"error": "Missing name"}), 400
     req_data['city_id'] = city_id
     new_city = City(**req_data)
     storage.new(new_city)
@@ -52,7 +54,8 @@ def place_getid(place_id):
     return jsonify(obj.to_dict())
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def place_del(place_id):
     """delete place by id"""
     obj = storage.get(Place, place_id)
