@@ -8,8 +8,7 @@ from flask_cors import CORS
 import os
 
 # setting env var
-host = os.getenv("HBNB_API_HOST", '0.0.0.0')
-port = os.getenv("HBNB_API_PORT", '5000')
+
 
 # global var app
 app = Flask(__name__)
@@ -19,7 +18,7 @@ app.register_blueprint(app_views)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    return jsonify({'error': 'Not found'}), 404
 
 
 @app.teardown_appcontext
@@ -29,4 +28,6 @@ def teardown_db(exception):
 
 
 if __name__ == "__main__":
+    host = os.getenv("HBNB_API_HOST", '0.0.0.0')
+    port = os.getenv("HBNB_API_PORT", '5000')
     app.run(host=host, port=port, threaded=True)
