@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Handle states rest apis"""
+"""Handle cities rest apis"""
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.city import City
@@ -14,7 +14,7 @@ def cities_get(state_id):
     if not s_obj:
         abort(404)
     all_cities = storage.all(City)
-    cities_states = [obj.to_dict() for obj in all_cities.values()
+    cities_states = [obj.to_dict() for obj in s_obj.cities
                      if obj.state_id == state_id]
     return jsonify(cities_states)
 

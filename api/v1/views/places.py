@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Handle states rest apis"""
+"""Handle places rest apis"""
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.city import City
