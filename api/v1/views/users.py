@@ -25,8 +25,10 @@ def user_post():
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
         # abort(400, )
-    if req_data.get("name") is None:
-        return jsonify({"error": "Missing name"}), 400
+    if req_data.get("email") is None:
+        return jsonify({"error": "Missing email"}), 400
+    if req_data.get("password") is None:
+        return jsonify({"error": "Missing password"}), 400
     new_user = User(**req_data)
     storage.new(new_user)
     storage.save()
