@@ -6,7 +6,7 @@ from models.user import User
 from models import storage
 
 
-@app_views.route('/users', methods=['GET'])
+@app_views.route('/users', methods=['GET'], strict_slashes=False)
 def user_get():
     """get method to ret users"""
     u_list = []
@@ -16,7 +16,7 @@ def user_get():
     return jsonify(u_list)
 
 
-@app_views.route('/users', methods=['POST'])
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
 def user_post():
     """post user amenity"""
     if request.content_type != 'application/json':
@@ -35,7 +35,7 @@ def user_post():
     return jsonify(new_user.to_dict()), 201
 
 
-@app_views.route('/users/<user_id>', methods=['GET'])
+@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def user_getid(user_id):
     """get user by id"""
     obj = storage.get(User, user_id)
@@ -44,7 +44,7 @@ def user_getid(user_id):
     return jsonify(obj.to_dict())
 
 
-@app_views.route('/users/<user_id>', methods=['DELETE'])
+@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def user_del(user_id):
     """delete user by id"""
     obj = storage.get(User, user_id)
@@ -55,7 +55,7 @@ def user_del(user_id):
     return jsonify({}), 200
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'])
+@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def user_put(user_id):
     """update user selected by id"""
     if request.content_type != 'application/json':
