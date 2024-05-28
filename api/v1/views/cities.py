@@ -25,11 +25,16 @@ def city_id(state_id):
     obj = storage.get(State, state_id)
     if not obj:
         abort(404)
+
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
     req_data = request.get_json()
+
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
     if req_data.get("name") is None:
         return jsonify({"error": "Missing name"}), 400
+
     req_data['state_id'] = state_id
     new_city = City(**req_data)
     storage.new(new_city)
@@ -63,9 +68,15 @@ def city_put(city_id):
     obj = storage.get(City, city_id)
     if not obj:
         abort(404)
+
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
+
     req_data = request.get_json()
+
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
+
     ignore_list = ["id", "updated_at", "created_at"]
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
