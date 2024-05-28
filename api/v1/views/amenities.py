@@ -19,10 +19,11 @@ def ament_get():
 @app_views.route('/amenities', methods=['POST'])
 def ament_post():
     """post new amenity"""
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
     req_data = request.get_json()
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
-        # abort(400, )
     if req_data.get("name") is None:
         return jsonify({"error": "Missing name"}), 400
     new_ament = Amenity(**req_data)
@@ -54,13 +55,19 @@ def amenity_del(amenity_id):
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'])
 def ament_put(amenity_id):
     """update amen selected by id"""
-    ignore_list = ["id", "updated_at", "created_at"]
     obj = storage.get(Amenity, amenity_id)
     if not obj:
         abort(404)
+
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Not json"}), 400
+
     req_data = request.get_json()
+
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
+
+    ignore_list = ["id", "updated_at", "created_at"]
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
     }
