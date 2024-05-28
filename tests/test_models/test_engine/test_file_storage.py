@@ -51,6 +51,23 @@ class TestFileStorageDocs(unittest.TestCase):
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
+    
+    def test_get(self):
+        """test get function"""
+        from models import storage
+        state = State(name="Cairo")
+        storage.save()
+        state_id = state.id
+        state_name = state.name
+        ret_state = storage.get(State, state_id)
+        self.assertEqual(state_name, ret_state.name)
+        self.assertEqual(state_id, ret_state.id)
+    
+    def test_count(self):
+        """test function count"""
+        from models import storage
+        count = storage.count()
+        self.assertEqual(count, len(storage.all()))       
 
 
 class TestFileStorage(unittest.TestCase):
