@@ -13,7 +13,6 @@ def cities_get(state_id):
     s_obj = storage.get(State, state_id)
     if not s_obj:
         abort(404)
-    all_cities = storage.all(City)
     cities_states = [obj.to_dict() for obj in s_obj.cities
                      if obj.state_id == state_id]
     return jsonify(cities_states)
