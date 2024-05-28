@@ -42,7 +42,8 @@ def state_getid(state_id):
     return jsonify(obj.to_dict())
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def state_del(state_id):
     """delete state by id"""
     obj = storage.get(State, state_id)
