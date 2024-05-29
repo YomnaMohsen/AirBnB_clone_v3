@@ -67,7 +67,7 @@ def user_put(user_id):
     if req_data is None:
         return jsonify({"error": "Not json"}), 400
 
-    ignore_list = ["id", "updated_at", "created_at"]
+    ignore_list = ["id", "email", "updated_at", "created_at"]
 
     update_dict = {
         k: v for k, v in req_data.items() if k not in ignore_list
